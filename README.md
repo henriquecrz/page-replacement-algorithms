@@ -11,3 +11,8 @@ Durante a disciplina foram estudados algoritmos de substituição de páginas em
 - ler como entrada o arquivo ​entrada.txt ​contendo a sequência de referência e o tamanho da memória em quadros. Por exemplo, para a sequência: 2,3,4,6,6,7 e o tamanho da memória de 5 quadros o arquivo seria conforme a Figura 1.
 
 - gerar como saída o arquivo​ saida.txt contendo a evolução da memória, as páginas que deram acerto, o total de erros, o total de requisições e a taxa de erro. Por exemplo, para a entrada referente à Figura1, a saída correta, para uma política X é a mostrada na Figura 2.
+
+## Instruções de execução
+
+- Instale https://sourceforge.net/projects/mingw/
+- Configure o path do bin nas variáveis de ambiente
