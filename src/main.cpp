@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-// #include "index.cpp"
 using namespace std;
 
 class Index
@@ -19,20 +18,15 @@ int main()
 
     if (inputFile.is_open())
     {
-        // while (getline(inputFile, lineContent))
-        // {
-        //     cout << lineContent << '\n';
-        // }
-
         for (size_t i = 0; i < 2 && getline(inputFile, lineContent); i += 1)
         {
             switch (i)
             {
             case 0:
-                cout << lineContent;
+                cout << lineContent << '\n';
                 break;
             case 1:
-                cout << lineContent;
+                cout << lineContent << '\n';
                 break;
             default:
                 break;
@@ -45,23 +39,6 @@ int main()
     {
         cout << "Unable the path \"" << path << "\"";
     }
-
-    // for (size_t i = 0; i < 2 && getline(inputFile, lineContent); i += 1)
-    // {
-    //     switch (i)
-    //     {
-    //     case 0:
-    //         cout << lineContent;
-    //         break;
-    //     case 1:
-    //         cout << lineContent;
-    //         break;
-    //     default:
-    //         break;
-    //     }
-    // }
-
-    // inputFile.close();
 
     return 0;
 }
