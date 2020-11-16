@@ -1,31 +1,24 @@
 #include <iostream>
 #include <fstream>
-using namespace std;
+#include "constants.hpp"
 
-class Index
-{
-public:
-    int kSequence = 0;
-    int kFramesQuantity = 1;
-};
+using namespace std;
 
 int main()
 {
-    string path = "..\\assets\\entrada.txt";
-    ifstream inputFile(path);
-    string lineContent;
-    Index index;
+    ifstream inputFile(kFilePath);
+    string lineContent = kEmptyString;
 
     if (inputFile.is_open())
     {
-        for (size_t i = 0; i < 2 && getline(inputFile, lineContent); i += 1)
+        for (size_t line = 0; line < kFileLength && getline(inputFile, lineContent); line += 1)
         {
-            switch (i)
+            switch (line)
             {
-            case 0:
+            case kSequenceLine:
                 cout << lineContent << '\n';
                 break;
-            case 1:
+            case kFramesQuantityLine:
                 cout << lineContent << '\n';
                 break;
             default:
@@ -37,7 +30,7 @@ int main()
     }
     else
     {
-        cout << "Unable the path \"" << path << "\"";
+        cout << "Unable to open \"" << kFilePath << "\"";
     }
 
     return 0;
