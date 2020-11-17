@@ -1,7 +1,9 @@
-#define kFilePath "..\\assets\\entrada.txt"
-#define kFileLength 2
+#define FILE_PATH "..\\assets\\entrada.txt"
+#define FILE_LENGTH 2
 
-#define kSequenceLine 0
-#define kFramesQuantityLine 1
+#define SEQUENCE_LINE 0
+#define FRAMES_QUANTITY_LINE 1
 
-#define kEmptyString ""
+#define EMPTY_STRING ""
+
+#define DELIMITER ","
