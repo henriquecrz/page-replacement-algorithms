@@ -220,23 +220,27 @@ int predict(vector<int> pg, vector<int> &fr, int pn, int index)
 }
 
 // PageReplacementAlgorithms
-Result opt(vector<int> pg, int fn)
+Result opt(vector<int> pages, int frames_quantity)
 {
     // Create an array for given number of
     // frames and initialize it as empty.
-    vector<int> fr;
-    int vector_length = pg.size();
+    vector<int> frames;
+    int vector_length = pages.size();
 
     // Traverse through page reference array
     // and check for miss and hit.
-    int hit = 0;
+    int hits = 0;
+
+    string evolution = EMPTY_STRING;
 
     for (int i = 0; i < vector_length; i++)
     {
         // Page found in a frame : HIT
-        if (search(pg[i], fr))
+        if (search(pages[i], frames))
         {
-            hit++;
+            hits++;
+
+            evolution += " hit in " + to_string(pages[i]) + "\n";
 
             continue;
         }
@@ -244,29 +248,36 @@ Result opt(vector<int> pg, int fn)
         // Page not found in a frame : MISS
 
         // If there is space available in frames.
-        if (fr.size() < fn)
+        if (frames.size() < frames_quantity)
         {
-            fr.push_back(pg[i]);
+            frames.push_back(pages[i]);
         }
         // Find the page to be replaced.
         else
         {
-            int j = predict(pg, fr, vector_length, i + 1);
-            fr[j] = pg[i];
+            int j = predict(pages, frames, vector_length, i + 1);
+            frames[j] = pages[i];
         }
+
+        for (const auto &item : frames)
+        {
+            evolution += ' ' + to_string(item);
+        }
+
+        evolution += "\n";
     }
 
-    cout << "No. of hits = " << hit << endl;
-    cout << "No. of misses = " << vector_length - hit << endl;
+    // cout << "No. of hits = " << hits << endl;
+    // cout << "No. of misses = " << vector_length - hits << endl;
 
     struct Result result;
 
     result.algorithm = "OPT";
-    result.evolution = "get_string_evolution()";
-    result.hits = hit;
-    result.faults = vector_length - hit;
+    result.evolution = evolution;
+    result.hits = hits;
+    result.faults = vector_length - hits;
     result.requests = vector_length;
-    result.error_rate = round_2_decimal_places((float)(vector_length - hit) / (float)vector_length);
+    result.error_rate = round_2_decimal_places((float)(vector_length - hits) / (float)vector_length);
 
     return result;
 }
@@ -282,7 +293,7 @@ void print_results(vector<Result> results)
         cout << "- Acertos: " << item.hits << endl;
         cout << "- Erros: " << item.faults << endl;
         cout << "- Total de requisições: " << item.requests << endl;
-        cout << "- Taxa de erro: " << item.error_rate << endl;
+        cout << "- Taxa de erro: " << item.error_rate;
         cout << EMPTY_STRING << endl;
     }
 }
@@ -298,11 +309,11 @@ void write_to_file(vector<Result> results)
         {
             output_file << item.algorithm << endl;
             output_file << EMPTY_STRING << endl;
-            output_file << "- Evolução: " << item.evolution << endl;
+            output_file << "- Evolução: " << endl << item.evolution << endl;
             output_file << "- Acertos: " << item.hits << endl;
             output_file << "- Erros: " << item.faults << endl;
             output_file << "- Total de requisições: " << item.requests << endl;
-            output_file << "- Taxa de erro: " << item.error_rate << endl;
+            output_file << "- Taxa de erro: " << item.error_rate;
             output_file << EMPTY_STRING << endl;
         }
 
@@ -347,9 +358,9 @@ int main()
         int frames_quantity = stoi(frames_quantity_line);
 
         Result fifo_result = fifo(formatted_sequence, frames_quantity);
-        // Result opt_result = opt(formatted_sequence, frames_quantity);
+        Result opt_result = opt(formatted_sequence, frames_quantity);
 
-        vector<Result> results{fifo_result};
+        vector<Result> results{fifo_result, opt_result};
 
         print_results(results);
         write_to_file(results);
