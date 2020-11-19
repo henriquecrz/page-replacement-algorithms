@@ -1,9 +1,30 @@
-#define FILE_PATH "..\\assets\\entrada.txt"
-#define FILE_LENGTH 2
+#include <iostream>
 
-#define SEQUENCE_LINE 0
-#define FRAMES_QUANTITY_LINE 1
+using namespace std;
 
-#define EMPTY_STRING ""
+namespace Path
+{
+    const string INPUT_FILE = "..\\assets\\entrada.txt";
+    const string OUTPUT_FILE = "..\\assets\\saida.txt";
+}
 
-#define DELIMITER ","
+namespace File
+{
+    const int LENGTH = 2;
+}
+
+namespace LineIndex
+{
+    const int SEQUENCE = 0;
+    const int FRAMES_QUANTITY = 1;
+}
+
+namespace String
+{
+    const string EMPTY = "";
+}
+
+namespace Delimiter
+{
+    const string COMMA = ",";
+}
