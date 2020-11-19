@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Utils
 vector<string> split(string value, string delimiter)
 {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
@@ -24,7 +25,8 @@ vector<string> split(string value, string delimiter)
     return res;
 }
 
-vector<int> get_int_array(vector<string> string_vector)
+// Utils
+vector<int> get_int_vector(vector<string> string_vector)
 {
     vector<int> int_vector;
 
@@ -36,6 +38,7 @@ vector<int> get_int_array(vector<string> string_vector)
     return int_vector;
 }
 
+// Utils
 float round_2_decimal_places(float var)
 {
     float value = (int)(var * 100 + .5);
@@ -43,14 +46,26 @@ float round_2_decimal_places(float var)
     return (float)value / 100;
 }
 
+// PageReplacementAlgorithms
+struct Result
+{
+    string algorithm;
+    string evolution;
+    int hits;
+    int faults;
+    int requests;
+    float error_rate;
+};
+
 #include <bits/stdc++.h>
 
-void fifoPageFaults(vector<int> pages, int capacity)
+// PageReplacementAlgorithms
+Result fifo(vector<int> pages, int frames_quantity)
 {
     // To represent set of current pages. We use
     // an unordered_set so that we quickly check
     // if a page is present in set or not
-    unordered_set<int> s;
+    set<int> s;
 
     // To store the pages in FIFO manner
     queue<int> indexes;
@@ -58,14 +73,15 @@ void fifoPageFaults(vector<int> pages, int capacity)
     // Start from initial page
     int page_faults = 0;
 
-    // cout << sizeof(pages[0]);
-
     int vector_length = pages.size();
+    string evolution = EMPTY_STRING;
 
     for (int i = 0; i < vector_length; i++)
     {
+        bool is_hit = false;
+
         // Check if the set can hold more pages
-        if (s.size() < capacity)
+        if (s.size() < frames_quantity)
         {
             // Insert it into set if not present
             // already which represents page fault
@@ -79,6 +95,10 @@ void fifoPageFaults(vector<int> pages, int capacity)
 
                 // Push the current page into the queue
                 indexes.push(pages[i]);
+            }
+            else
+            {
+                is_hit = true;
             }
         }
         // If the set is full then need to perform FIFO
@@ -111,19 +131,37 @@ void fifoPageFaults(vector<int> pages, int capacity)
                 // Increment page faults
                 page_faults++;
             }
+            else
+            {
+                is_hit = true;
+            }
         }
+
+        if (is_hit)
+        {
+            evolution += " hit in " + to_string(pages[i]);
+        }
+        else
+        {
+            for (auto it = s.begin(); it != s.end(); ++it)
+            {
+                evolution += ' ' + to_string(*it);
+            }
+        }
+
+        evolution += "\n";
     }
 
-    float error_rate = (float)page_faults / (float)vector_length;
+    struct Result result;
 
-    cout << " Evolução:" << endl;
+    result.algorithm = "FIFO";
+    result.evolution = evolution;
+    result.hits = vector_length - page_faults;
+    result.faults = page_faults;
+    result.requests = vector_length;
+    result.error_rate = round_2_decimal_places((float)page_faults / (float)vector_length);
 
-    // print evolution
-
-    cout << " Acertos: " << vector_length - page_faults << endl;
-    cout << " Erros: " << page_faults << endl;
-    cout << " Total de requisições: " << vector_length << endl;
-    cout << " Taxa de erro: " << round_2_decimal_places(error_rate) << endl;
+    return result;
 }
 
 // Function to check whether a page exists
@@ -143,7 +181,7 @@ bool search(int key, vector<int> &fr)
 
 // Function to find the frame that will not be used
 // recently in future after given index in pg[0..pn-1]
-int predict(int pg[], vector<int> &fr, int pn, int index)
+int predict(vector<int> pg, vector<int> &fr, int pn, int index)
 {
     // Store the index of pages which are going
     // to be used recently in future
@@ -181,17 +219,19 @@ int predict(int pg[], vector<int> &fr, int pn, int index)
     return (res == -1) ? 0 : res;
 }
 
-void optimalPage(int pg[], int pn, int fn)
+// PageReplacementAlgorithms
+Result opt(vector<int> pg, int fn)
 {
     // Create an array for given number of
     // frames and initialize it as empty.
     vector<int> fr;
+    int vector_length = pg.size();
 
     // Traverse through page reference array
     // and check for miss and hit.
     int hit = 0;
 
-    for (int i = 0; i < pn; i++)
+    for (int i = 0; i < vector_length; i++)
     {
         // Page found in a frame : HIT
         if (search(pg[i], fr))
@@ -211,63 +251,72 @@ void optimalPage(int pg[], int pn, int fn)
         // Find the page to be replaced.
         else
         {
-            int j = predict(pg, fr, pn, i + 1);
+            int j = predict(pg, fr, vector_length, i + 1);
             fr[j] = pg[i];
         }
     }
 
     cout << "No. of hits = " << hit << endl;
-    cout << "No. of misses = " << pn - hit << endl;
+    cout << "No. of misses = " << vector_length - hit << endl;
+
+    struct Result result;
+
+    result.algorithm = "OPT";
+    result.evolution = "get_string_evolution()";
+    result.hits = hit;
+    result.faults = vector_length - hit;
+    result.requests = vector_length;
+    result.error_rate = round_2_decimal_places((float)(vector_length - hit) / (float)vector_length);
+
+    return result;
 }
 
-void fifo(vector<string> sequence, int frames_quantity)
+// Utils
+void print_results(vector<Result> results)
 {
-    int sequence_length = sequence.size();
-    vector<vector<int>> evolution;
-    int hits_quantity = 0;
-    int errors_quantity = 0;
-
-    for (size_t i = 0; i < sequence_length; i++)
+    for (const auto &item : results)
     {
-        vector<int> frame;
-
-        if (i == 0)
-        {
-            /* code */
-        }
-        else
-        {
-            /* code */
-        }
-
-        evolution.push_back(frame);
+        cout << item.algorithm << endl;
+        cout << EMPTY_STRING << endl;
+        cout << "- Evolução: " << endl << item.evolution << endl;
+        cout << "- Acertos: " << item.hits << endl;
+        cout << "- Erros: " << item.faults << endl;
+        cout << "- Total de requisições: " << item.requests << endl;
+        cout << "- Taxa de erro: " << item.error_rate << endl;
+        cout << EMPTY_STRING << endl;
     }
-
-    cout << "Evolução";
-
-    cout << "Acertos";
-
-    cout << " Erros" << errors_quantity << endl;
-    cout << " Total de requisições: " << sequence_length << endl;
-    cout << " Taxa de erro: " << errors_quantity << endl;
 }
 
-void opt(vector<string> sequence, int frames_quantity)
+// Utils
+void write_to_file(vector<Result> results)
 {
-    cout << "Evolução";
+    ofstream output_file(OUTPUT_FILE_PATH);
 
-    cout << "Acertos";
+    if (output_file.is_open())
+    {
+        for (const auto &item : results)
+        {
+            output_file << item.algorithm << endl;
+            output_file << EMPTY_STRING << endl;
+            output_file << "- Evolução: " << item.evolution << endl;
+            output_file << "- Acertos: " << item.hits << endl;
+            output_file << "- Erros: " << item.faults << endl;
+            output_file << "- Total de requisições: " << item.requests << endl;
+            output_file << "- Taxa de erro: " << item.error_rate << endl;
+            output_file << EMPTY_STRING << endl;
+        }
 
-    cout << "Erros";
-
-    cout << "Total de requisições";
-
-    cout << "Taxa de erro";
+        output_file.close();
+    }
+    else
+    {
+        cout << "Unable to open \"" << OUTPUT_FILE_PATH << endl;
+    }
 }
 
 int main()
 {
-    ifstream input_file(FILE_PATH);
+    ifstream input_file(INPUT_FILE_PATH);
     string line_content = EMPTY_STRING;
     string sequence_line = EMPTY_STRING;
     string frames_quantity_line = EMPTY_STRING;
@@ -294,19 +343,20 @@ int main()
         input_file.close();
 
         vector<string> sequence = split(sequence_line, DELIMITER);
+        vector<int> formatted_sequence = get_int_vector(sequence);
         int frames_quantity = stoi(frames_quantity_line);
 
-        vector<int> formatted_sequence = get_int_array(sequence);
-        // int int_sequence[sequence.size()];
-        // copy(sequence.begin(), sequence.end(), int_sequence);
+        Result fifo_result = fifo(formatted_sequence, frames_quantity);
+        // Result opt_result = opt(formatted_sequence, frames_quantity);
 
-        fifoPageFaults(formatted_sequence, frames_quantity);        
-        // fifo(sequence, frames_quantity);
-        // opt(sequence, frames_quantity);
+        vector<Result> results{fifo_result};
+
+        print_results(results);
+        write_to_file(results);
     }
     else
     {
-        cout << "Unable to open \"" << FILE_PATH << endl;
+        cout << "Unable to open \"" << INPUT_FILE_PATH << endl;
     }
 
     return 0;
