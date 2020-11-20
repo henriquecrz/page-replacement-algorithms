@@ -64,12 +64,11 @@ void Utils::print_results(vector<Result> results)
     {
         cout << item.algorithm << endl;
         cout << Value::EMPTY << endl;
-        cout << "- Evolução: " << endl
-             << item.evolution << endl;
+        cout << "- Evolução: " << endl << item.evolution << endl;
         cout << "- Acertos: " << item.hits << endl;
         cout << "- Erros: " << item.faults << endl;
         cout << "- Total de requisições: " << item.requests << endl;
-        cout << "- Taxa de erro: " << item.error_rate;
+        cout << "- Taxa de erro: " << item.error_rate << endl;
         cout << Value::EMPTY << endl;
     }
 }
@@ -84,12 +83,11 @@ void Utils::write_to_file(vector<Result> results)
         {
             output_file << item.algorithm << endl;
             output_file << Value::EMPTY << endl;
-            output_file << "- Evolução: " << endl
-                        << item.evolution << endl;
+            output_file << "- Evolução: " << endl << item.evolution << endl;
             output_file << "- Acertos: " << item.hits << endl;
             output_file << "- Erros: " << item.faults << endl;
             output_file << "- Total de requisições: " << item.requests << endl;
-            output_file << "- Taxa de erro: " << item.error_rate;
+            output_file << "- Taxa de erro: " << item.error_rate << endl;
             output_file << Value::EMPTY << endl;
         }
 
