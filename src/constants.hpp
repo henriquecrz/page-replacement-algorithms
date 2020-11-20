@@ -19,7 +19,7 @@ namespace LineIndex
     const int FRAMES_QUANTITY = 1;
 }
 
-namespace String
+namespace Value
 {
     const string EMPTY = "";
 }
