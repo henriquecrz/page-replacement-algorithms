@@ -1,5 +1,8 @@
+C++ project path structure: https://mousepawmedia.net/rmd/buildsystem/c_and_cpp.html
+
 https://google.github.io/styleguide/cppguide.html
 https://www.w3schools.com/cpp/cpp_classes.asp
 https://dev.to/iamthebryguy94/how-to-use-multiple-files-in-c-adn
 https://stackoverflow.com/questions/6995572/using-multiple-cpp-files-in-c-program
 https://stackoverflow.com/questions/27381193/using-functions-of-another-cpp-file?noredirect=1&lq=1
+https://stackoverflow.com/questions/12042549/define-constant-variables-in-c-header
